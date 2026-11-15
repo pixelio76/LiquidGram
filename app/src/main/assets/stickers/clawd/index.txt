@@ -1,0 +1,10 @@
+01_hello.tgs 👋
+02_love.tgs ❤️
+03_jump.tgs 😄
+04_sleep.tgs 😴
+05_think.tgs 🤔
+06_party.tgs 🎉
+07_sad.tgs 😢
+08_coding.tgs 💻
+09_sparkle.tgs ✨
+10_shocked.tgs 😱
