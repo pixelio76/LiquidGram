@@ -288,4 +288,7 @@ private fun LoggedIn(repo: TelegramRepository) {
             }
             // A call slides up over every screen (signaling only for now, see ActiveCall).
             org.liquidgram.ui.CallOverlay(repo)
+            // New releases from GitHub (checked at most every 6 hours).
+            LaunchedEffect(Unit) { org.liquidgram.ui.Updates.check(context) }
+            org.liquidgram.ui.UpdateOverlay()
 }
