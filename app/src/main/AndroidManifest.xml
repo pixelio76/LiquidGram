@@ -10,6 +10,8 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <!-- New message notifications (asked for at start on Android 13+). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Installs updates downloaded from the GitHub releases (Settings → App Update). -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <application
         android:label="LiquidGram"
         android:icon="@mipmap/ic_launcher"
