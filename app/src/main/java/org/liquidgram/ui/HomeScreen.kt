@@ -1,5 +1,7 @@
 package org.liquidgram.ui
 
+import androidx.compose.material.icons.rounded.SystemUpdate
+import kotlinx.coroutines.launch
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.zIndex
 import io.github.neoruaa.glasmio.glass.trackBackdropPosition
@@ -533,6 +535,8 @@ private fun CallsPage(repo: TelegramRepository, backdrop: io.github.neoruaa.glas
 private fun SettingsPage(repo: TelegramRepository, backdrop: io.github.neoruaa.glasmio.glass.render.backdrops.LayerBackdrop, openChat: (Long) -> Unit, openAppearance: () -> Unit, open: (String) -> Unit, openCalls: () -> Unit) {
     val me by repo.me.collectAsState()
     val soon = rememberSoon()
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val updateScope = androidx.compose.runtime.rememberCoroutineScope()
     val onRow: (String) -> Unit = { label ->
         when (label) {
             "Saved Messages" -> repo.chats.value.firstOrNull { it.isSaved }?.let { openChat(it.id) } ?: soon(label)
@@ -547,6 +551,7 @@ private fun SettingsPage(repo: TelegramRepository, backdrop: io.github.neoruaa.g
             "Power Saving" -> open("power")
             "Quick Reactions" -> open("reactions")
             "Plugins" -> open("plugins")
+            "App Update" -> updateScope.launch { Updates.check(context, manual = true) }
             else -> soon(label)
         }
     }
@@ -585,7 +590,10 @@ private fun SettingsPage(repo: TelegramRepository, backdrop: io.github.neoruaa.g
                     )
                 }
                 item {
-                    Group(onRow, Triple(Icons.Rounded.Extension, "Plugins", Color(0xFF5E5CE6)))
+                    Group(onRow,
+                        Triple(Icons.Rounded.Extension, "Plugins", Color(0xFF5E5CE6)),
+                        Triple(Icons.Rounded.SystemUpdate, "App Update", Color(0xFF30D158)),
+                    )
                 }
                 item {
                     Column(Modifier.padding(horizontal = 16.dp, vertical = 10.dp).clip(RoundedCornerShape(26.dp)).background(Tg.Card)) {
