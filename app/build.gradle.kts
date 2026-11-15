@@ -25,13 +25,23 @@ android {
         buildConfigField("String", "TG_API_HASH", "\"" + local.getProperty("telegram.apiHash", "") + "\"")
         ndk { abiFilters += listOf("arm64-v8a", "x86_64") }
     }
+    // Release key: release.storeFile / storePassword / keyAlias / keyPassword in local.properties (never committed).
+    // Without them a release build falls back to the debug key, so it still installs.
+    val local = Properties().apply { rootProject.file("local.properties").takeIf { it.exists() }?.reader()?.use(::load) }
+    val releaseKey = local.getProperty("release.storeFile")?.let { path ->
+        signingConfigs.create("release") {
+            storeFile = file(path)
+            storePassword = local.getProperty("release.storePassword")
+            keyAlias = local.getProperty("release.keyAlias")
+            keyPassword = local.getProperty("release.keyPassword")
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // shortcut: release is signed with the debug key so it installs; use your own keystore before publishing
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = releaseKey ?: signingConfigs.getByName("debug")
         }
     }
     buildFeatures { compose = true; buildConfig = true }
